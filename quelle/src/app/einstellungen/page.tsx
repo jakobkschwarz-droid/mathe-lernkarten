@@ -6,7 +6,7 @@ import { einstellungenLaden, einstellungenSpeichern, type Einstellungen } from "
 import type { Karte, Widerspruch } from "@/lib/types";
 
 export default function EinstellungenSeite() {
-  const [e, setE] = useState<Einstellungen>({ schluessel: "", qualitaet: "hoch" });
+  const [e, setE] = useState<Einstellungen>({ anbieter: "claude", schluessel: "", geminiSchluessel: "", qualitaet: "hoch" });
   const [gespeichert, setGespeichert] = useState(false);
   const [meldung, setMeldung] = useState<string | null>(null);
   const datei = useRef<HTMLInputElement>(null);
@@ -60,12 +60,29 @@ export default function EinstellungenSeite() {
       <div className="flaeche polster">
         <h3 style={{ marginTop: 0 }}>Zugang zur KI</h3>
         <label className="feld">
-          <span>Persönlicher Zugangsschlüssel</span>
-          <input type="password" value={e.schluessel} onChange={(x) => setE({ ...e, schluessel: x.target.value })} placeholder="sk-ant-…" autoComplete="off" />
-          <span className="leise klein" style={{ fontWeight: 400, marginTop: 6 }}>
-            Du bekommst ihn kostenlos in deinem Konto auf console.anthropic.com. Er bleibt nur auf diesem Gerät und wird ausschließlich zur KI geschickt, nie an andere. Auf jedem Gerät, das du nutzt, trägst du ihn einmal ein.
-          </span>
+          <span>Welche KI soll die Karten erstellen?</span>
+          <select value={e.anbieter} onChange={(x) => setE({ ...e, anbieter: x.target.value as Einstellungen["anbieter"] })}>
+            <option value="claude">Claude (beste Genauigkeit bei Formeln, kostet nach Verbrauch)</option>
+            <option value="gemini">Google Gemini (kostenlose Stufe möglich, mit Tageslimit)</option>
+          </select>
         </label>
+        {e.anbieter === "claude" ? (
+          <label className="feld">
+            <span>Persönlicher Zugangsschlüssel für Claude</span>
+            <input type="password" value={e.schluessel} onChange={(x) => setE({ ...e, schluessel: x.target.value })} placeholder="sk-ant-…" autoComplete="off" />
+            <span className="leise klein" style={{ fontWeight: 400, marginTop: 6 }}>
+              Du bekommst ihn in deinem Konto auf console.anthropic.com (mit etwas Guthaben). Er bleibt nur auf diesem Gerät und wird ausschließlich zur KI geschickt, nie an andere. Auf jedem Gerät, das du nutzt, trägst du ihn einmal ein.
+            </span>
+          </label>
+        ) : (
+          <label className="feld">
+            <span>Persönlicher Zugangsschlüssel für Gemini</span>
+            <input type="password" value={e.geminiSchluessel} onChange={(x) => setE({ ...e, geminiSchluessel: x.target.value })} placeholder="AI… oder AQ.…" autoComplete="off" />
+            <span className="leise klein" style={{ fontWeight: 400, marginTop: 6 }}>
+              Du bekommst ihn kostenlos auf aistudio.google.com („Get API key“). Er bleibt nur auf diesem Gerät. Bei Gemini solltest du die erstellten Karten besonders aufmerksam ansehen, vor allem bei Formeln.
+            </span>
+          </label>
+        )}
         <label className="feld">
           <span>Genauigkeit</span>
           <select value={e.qualitaet} onChange={(x) => setE({ ...e, qualitaet: x.target.value as Einstellungen["qualitaet"] })}>

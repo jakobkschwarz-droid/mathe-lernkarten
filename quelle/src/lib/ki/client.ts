@@ -1,7 +1,7 @@
 "use client";
 
 import Anthropic from "@anthropic-ai/sdk";
-import { einstellungenLaden } from "../einstellungen";
+import { einstellungenLaden, type Anbieter } from "../einstellungen";
 
 // Die KI wird direkt aus dem Browser mit dem eigenen Zugangsschlüssel
 // angesprochen. Es gibt keinen eigenen Server, der Material oder Schlüssel sieht.
@@ -13,15 +13,18 @@ export const MODELLE: Record<Qualitaet, string> = {
   schnell: "claude-sonnet-5-5",
 };
 
-export class NutzerFehler extends Error {}
+import { NutzerFehler } from "./nutzerfehler";
+import { frageGemini } from "./gemini";
 
-export function zugang(): { apiKey: string; qualitaet: Qualitaet } {
+export { NutzerFehler };
+
+export function zugang(): { anbieter: Anbieter; apiKey: string; qualitaet: Qualitaet } {
   const e = einstellungenLaden();
-  const apiKey = e.schluessel.trim();
+  const apiKey = (e.anbieter === "gemini" ? e.geminiSchluessel : e.schluessel).trim();
   if (!apiKey) {
     throw new NutzerFehler("Es ist noch kein Zugangsschlüssel für die KI hinterlegt. Trage ihn unter „Einstellungen“ ein.");
   }
-  return { apiKey, qualitaet: e.qualitaet };
+  return { anbieter: e.anbieter, apiKey, qualitaet: e.qualitaet };
 }
 
 interface Anfrage {
@@ -34,7 +37,8 @@ interface Anfrage {
 
 /** Stellt der KI eine Aufgabe und erhält eine strukturierte Antwort zurück. */
 export async function frageKI<T>(a: Anfrage): Promise<T> {
-  const { apiKey, qualitaet } = zugang();
+  const { anbieter, apiKey, qualitaet } = zugang();
+  if (anbieter === "gemini") return frageGemini<T>(apiKey, qualitaet, a);
   const client = new Anthropic({ apiKey, dangerouslyAllowBrowser: true, maxRetries: 3, timeout: 20 * 60 * 1000 });
   let nachricht: Anthropic.Beta.BetaMessage;
   try {

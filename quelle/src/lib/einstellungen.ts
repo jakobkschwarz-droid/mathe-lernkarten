@@ -1,29 +1,29 @@
 "use client";
 
+export type Anbieter = "claude" | "gemini";
+
 export interface Einstellungen {
+  anbieter: Anbieter;
+  /** Zugangsschlüssel für Claude */
   schluessel: string;
+  /** Zugangsschlüssel für Google Gemini */
+  geminiSchluessel: string;
   qualitaet: "hoch" | "schnell";
 }
 
 const KEY = "lernapp-einstellungen";
+const STANDARD: Einstellungen = { anbieter: "claude", schluessel: "", geminiSchluessel: "", qualitaet: "hoch" };
 
 export function einstellungenLaden(): Einstellungen {
   try {
     const roh = localStorage.getItem(KEY);
-    if (roh) return { schluessel: "", qualitaet: "hoch", ...JSON.parse(roh) };
+    if (roh) return { ...STANDARD, ...JSON.parse(roh) };
   } catch {}
-  return { schluessel: "", qualitaet: "hoch" };
+  return { ...STANDARD };
 }
 
 export function einstellungenSpeichern(e: Einstellungen) {
   try {
     localStorage.setItem(KEY, JSON.stringify(e));
   } catch {}
-}
-
-export function kopfzeilen(): Record<string, string> {
-  const e = einstellungenLaden();
-  const h: Record<string, string> = { "x-lernapp-qualitaet": e.qualitaet };
-  if (e.schluessel) h["x-lernapp-schluessel"] = e.schluessel;
-  return h;
 }
