@@ -1,0 +1,346 @@
+:root {
+  --bg: #f6f5f1;
+  --flaeche: #ffffff;
+  --flaeche-2: #fbfaf7;
+  --text: #1d2128;
+  --text-2: #565d6b;
+  --text-3: #8a909c;
+  --linie: #e5e3dd;
+  --linie-2: #d6d3cb;
+  --akzent: #4257b2;
+  --akzent-dunkel: #33469a;
+  --akzent-hell: #eef0fa;
+  --gruen: #2c7a52;
+  --gruen-hell: #e7f3ec;
+  --rot: #b83a2e;
+  --rot-hell: #fbeceb;
+  --gelb: #9a6510;
+  --gelb-hell: #fcf3e1;
+  --schatten: 0 1px 2px rgba(20, 24, 33, 0.04), 0 4px 16px rgba(20, 24, 33, 0.05);
+  --radius: 16px;
+  --schrift: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #15171c;
+    --flaeche: #1d2027;
+    --flaeche-2: #22262e;
+    --text: #e9eaee;
+    --text-2: #b0b5c0;
+    --text-3: #7f8592;
+    --linie: #2d313a;
+    --linie-2: #3a3f4a;
+    --akzent: #8c9eef;
+    --akzent-dunkel: #a6b4f4;
+    --akzent-hell: #252b45;
+    --gruen: #6cc596;
+    --gruen-hell: #1d3328;
+    --rot: #ee8b80;
+    --rot-hell: #3a2220;
+    --gelb: #e6b45e;
+    --gelb-hell: #3a2f1c;
+    --schatten: 0 1px 2px rgba(0, 0, 0, 0.3), 0 4px 16px rgba(0, 0, 0, 0.25);
+    color-scheme: dark;
+  }
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--schrift);
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--akzent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+button, input, textarea, select { font: inherit; color: inherit; }
+
+/* ---------- Grundgerüst ---------- */
+.kopfleiste {
+  position: sticky; top: 0; z-index: 20;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: saturate(1.4) blur(10px);
+  border-bottom: 1px solid var(--linie);
+}
+.kopfleiste-innen {
+  max-width: 1080px; margin: 0 auto; padding: 0 24px;
+  display: flex; align-items: center; gap: 28px; height: 64px;
+}
+.logo { font-weight: 700; font-size: 18px; color: var(--text); display: flex; align-items: center; gap: 10px; white-space: nowrap; }
+.logo:hover { text-decoration: none; }
+.logo-zeichen {
+  width: 32px; height: 32px; border-radius: 9px; background: var(--akzent); color: #fff;
+  display: grid; place-items: center; font-family: KaTeX_Main, Georgia, serif; font-size: 19px; font-style: italic;
+}
+.navigation { display: flex; gap: 4px; flex: 1; overflow-x: auto; scrollbar-width: none; }
+.navigation a {
+  color: var(--text-2); padding: 7px 13px; border-radius: 10px; font-size: 15.5px; white-space: nowrap; position: relative;
+}
+.navigation a:hover { background: var(--flaeche); text-decoration: none; color: var(--text); }
+.navigation a.aktiv { color: var(--text); background: var(--flaeche); box-shadow: var(--schatten); font-weight: 600; }
+.zaehler {
+  display: inline-block; min-width: 20px; padding: 0 6px; margin-left: 6px; border-radius: 10px;
+  background: var(--gelb-hell); color: var(--gelb); font-size: 12.5px; font-weight: 700; line-height: 20px; text-align: center;
+}
+.hintergrund-hinweis { font-size: 14px; color: var(--akzent); display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+.hintergrund-hinweis:hover { text-decoration: none; }
+
+main { max-width: 1080px; margin: 0 auto; padding: 40px 24px 96px; }
+.schmal { max-width: 760px; margin-left: auto; margin-right: auto; }
+
+h1 { font-size: 34px; line-height: 1.2; letter-spacing: -0.02em; margin: 0 0 8px; font-weight: 700; }
+h2 { font-size: 23px; line-height: 1.3; letter-spacing: -0.01em; margin: 40px 0 16px; font-weight: 700; }
+h3 { font-size: 19px; line-height: 1.35; margin: 28px 0 12px; font-weight: 650; }
+h4 { font-size: 16.5px; margin: 20px 0 10px; font-weight: 650; color: var(--text-2); }
+.unterzeile { color: var(--text-2); margin: 0 0 32px; font-size: 18px; }
+.leise { color: var(--text-3); }
+.klein { font-size: 14.5px; }
+
+/* ---------- Bausteine ---------- */
+.flaeche {
+  background: var(--flaeche); border: 1px solid var(--linie); border-radius: var(--radius); box-shadow: var(--schatten);
+}
+.polster { padding: 24px 28px; }
+
+.knopf {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  border: 1px solid var(--linie-2); background: var(--flaeche); color: var(--text);
+  padding: 10px 18px; border-radius: 12px; cursor: pointer; font-weight: 550; font-size: 16px;
+  transition: background .15s, border-color .15s, transform .05s;
+  text-decoration: none !important; white-space: nowrap;
+}
+.knopf:hover { background: var(--flaeche-2); border-color: var(--text-3); }
+.knopf:active { transform: translateY(1px); }
+.knopf:disabled { opacity: .5; cursor: not-allowed; }
+.knopf.haupt { background: var(--akzent); border-color: var(--akzent); color: #fff; }
+.knopf.haupt:hover { background: var(--akzent-dunkel); border-color: var(--akzent-dunkel); }
+@media (prefers-color-scheme: dark) { .knopf.haupt { color: #11131a; } }
+.knopf.gross { padding: 14px 26px; font-size: 18px; border-radius: 14px; }
+.knopf.klein { padding: 6px 12px; font-size: 14.5px; border-radius: 10px; }
+.knopf.still { border-color: transparent; background: transparent; color: var(--text-2); }
+.knopf.still:hover { background: var(--flaeche-2); color: var(--text); }
+.knopf.gefahr { color: var(--rot); }
+.knopf.gefahr:hover { background: var(--rot-hell); border-color: var(--rot); }
+
+.reihe { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.zwischen { justify-content: space-between; }
+.raster { display: grid; gap: 18px; }
+.raster-3 { grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); }
+
+.hinweisbox {
+  border-radius: 14px; padding: 14px 18px; display: flex; gap: 14px; align-items: center; justify-content: space-between; flex-wrap: wrap;
+  border: 1px solid transparent; margin-bottom: 14px;
+}
+.hinweisbox.gelb { background: var(--gelb-hell); border-color: color-mix(in srgb, var(--gelb) 25%, transparent); }
+.hinweisbox.blau { background: var(--akzent-hell); border-color: color-mix(in srgb, var(--akzent) 22%, transparent); }
+.hinweisbox.rot { background: var(--rot-hell); border-color: color-mix(in srgb, var(--rot) 25%, transparent); }
+.hinweisbox.gruen { background: var(--gruen-hell); border-color: color-mix(in srgb, var(--gruen) 25%, transparent); }
+
+.etikett {
+  display: inline-block; font-size: 12.5px; font-weight: 650; letter-spacing: .03em; padding: 2px 9px; border-radius: 999px;
+  background: var(--akzent-hell); color: var(--akzent);
+}
+.etikett.gruen { background: var(--gruen-hell); color: var(--gruen); }
+.etikett.gelb { background: var(--gelb-hell); color: var(--gelb); }
+.etikett.rot { background: var(--rot-hell); color: var(--rot); }
+.etikett.grau { background: var(--flaeche-2); color: var(--text-3); border: 1px solid var(--linie); }
+
+.balken { height: 6px; background: var(--linie); border-radius: 99px; overflow: hidden; }
+.balken > div { height: 100%; background: var(--gruen); border-radius: 99px; transition: width .4s; }
+
+.pfad { color: var(--text-3); font-size: 14.5px; display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: center; }
+.pfad a { color: var(--text-2); }
+.pfad .trenner { color: var(--linie-2); }
+
+input[type="text"], input[type="password"], textarea, select {
+  width: 100%; border: 1px solid var(--linie-2); border-radius: 12px; background: var(--flaeche); padding: 10px 14px;
+  outline: none; transition: border-color .15s, box-shadow .15s;
+}
+input:focus, textarea:focus, select:focus { border-color: var(--akzent); box-shadow: 0 0 0 3px var(--akzent-hell); }
+textarea { resize: vertical; min-height: 90px; line-height: 1.5; }
+label.feld { display: block; margin-bottom: 16px; }
+label.feld > span { display: block; font-weight: 600; font-size: 15px; margin-bottom: 6px; }
+
+/* ---------- Mathematik ---------- */
+.mathe p { margin: 0 0 .6em; }
+.mathe p:last-child { margin-bottom: 0; }
+.mathe ol, .mathe ul { margin: .2em 0 .6em; padding-left: 1.4em; }
+.mathe li { margin: .2em 0; }
+.mathe .katex { font-size: 1.14em; }
+.mathe .katex-display { margin: .7em 0; overflow-x: auto; overflow-y: hidden; padding: 4px 0; }
+.mathe .katex-display > .katex { font-size: 1.3em; }
+.mathe code { font-family: inherit; }
+
+/* ---------- Übersicht ---------- */
+.kennzahlen { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0; }
+.kennzahl { padding: 20px 24px; border-right: 1px solid var(--linie); }
+.kennzahl:last-child { border-right: none; }
+.kennzahl .wert { font-size: 26px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.2; }
+.kennzahl .wert.text { font-size: 19px; }
+.kennzahl .name { color: var(--text-3); font-size: 14px; margin-top: 4px; }
+@media (max-width: 720px) {
+  .kennzahl { border-right: none; border-bottom: 1px solid var(--linie); }
+}
+
+.bereich-kachel { display: block; padding: 22px 24px; color: var(--text); transition: transform .15s, box-shadow .15s; }
+.bereich-kachel:hover { text-decoration: none; transform: translateY(-2px); box-shadow: 0 2px 4px rgba(20,24,33,.05), 0 10px 28px rgba(20,24,33,.08); }
+.bereich-kachel h3 { margin: 0 0 4px; font-size: 21px; }
+.bereich-kachel .zahlen { color: var(--text-2); font-size: 15.5px; margin-bottom: 14px; }
+.bereich-kachel .themenliste { color: var(--text-3); font-size: 14.5px; margin-top: 14px; line-height: 1.5; }
+
+.leerzustand { text-align: center; padding: 64px 24px; }
+.leerzustand .symbol { font-size: 46px; margin-bottom: 8px; }
+.leerzustand h2 { margin-top: 0; }
+
+/* ---------- Upload ---------- */
+.ablage {
+  border: 2px dashed var(--linie-2); border-radius: 20px; padding: 44px 24px; text-align: center; cursor: pointer;
+  background: var(--flaeche); transition: border-color .15s, background .15s;
+}
+.ablage:hover, .ablage.aktiv { border-color: var(--akzent); background: var(--akzent-hell); }
+.ablage .titel { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+.ablage .text { color: var(--text-2); }
+.ablage .formate { color: var(--text-3); font-size: 14px; margin-top: 10px; }
+
+.dateiliste { list-style: none; margin: 0; padding: 0; }
+.dateiliste li { display: flex; gap: 14px; align-items: center; padding: 14px 20px; border-bottom: 1px solid var(--linie); }
+.dateiliste li:last-child { border-bottom: none; }
+.dateiliste .symbol { font-size: 22px; width: 28px; text-align: center; }
+.dateiliste .name { font-weight: 600; word-break: break-word; }
+.dateiliste .info { color: var(--text-3); font-size: 14px; }
+.dateiliste .fehlertext { color: var(--rot); font-size: 14px; }
+
+.schritte { list-style: none; padding: 0; margin: 0; }
+.schritte li { display: flex; gap: 14px; align-items: flex-start; padding: 9px 0; color: var(--text-3); }
+.schritte li.aktiv { color: var(--text); font-weight: 600; }
+.schritte li.erledigt { color: var(--text-2); }
+.schritte .punkt { width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--linie-2); flex-shrink: 0; display: grid; place-items: center; font-size: 13px; margin-top: 1px; }
+.schritte li.erledigt .punkt { background: var(--gruen); border-color: var(--gruen); color: #fff; }
+.schritte li.aktiv .punkt { border-color: var(--akzent); border-top-color: transparent; animation: drehen 0.9s linear infinite; }
+.schritte .detail { display: block; font-weight: 400; color: var(--text-3); font-size: 14.5px; }
+@keyframes drehen { to { transform: rotate(360deg); } }
+.dreher { width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--akzent); border-top-color: transparent; animation: drehen .9s linear infinite; display: inline-block; }
+
+/* ---------- Themenansicht & Kartenliste ---------- */
+.themenkopf { margin-bottom: 28px; }
+.themenkopf .pfad { margin-bottom: 10px; }
+.unterthemen { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 8px; }
+.unterthemen a { background: var(--flaeche); border: 1px solid var(--linie); padding: 6px 14px; border-radius: 999px; color: var(--text-2); font-size: 15px; }
+.unterthemen a:hover { border-color: var(--akzent); color: var(--akzent); text-decoration: none; }
+
+.themenabschnitt h2 { border-bottom: 1px solid var(--linie); padding-bottom: 8px; }
+.kartenliste { display: grid; gap: 10px; }
+.karteneintrag { padding: 0; overflow: hidden; }
+.karteneintrag .vorne { display: flex; gap: 14px; align-items: flex-start; padding: 16px 20px; cursor: pointer; }
+.karteneintrag .vorne:hover { background: var(--flaeche-2); }
+.karteneintrag .frage { flex: 1; font-weight: 600; }
+.karteneintrag .hinten { padding: 4px 20px 18px 20px; border-top: 1px dashed var(--linie); }
+.karteneintrag .hinten .antwort { padding-top: 14px; }
+.karteneintrag .pfeil { color: var(--text-3); transition: transform .15s; margin-top: 2px; }
+.karteneintrag.offen .pfeil { transform: rotate(90deg); }
+.erklaerung { margin-top: 12px; padding: 10px 14px; background: var(--flaeche-2); border-left: 3px solid var(--akzent); border-radius: 6px; color: var(--text-2); font-size: 15.5px; }
+.quellen { color: var(--text-3); font-size: 13.5px; margin-top: 12px; }
+
+/* ---------- Lernmodus ---------- */
+.lernkopf { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 18px; }
+.lernkarte { min-height: 340px; padding: 36px 44px 32px; display: flex; flex-direction: column; }
+.lernkarte .frage { font-size: 25px; font-weight: 650; line-height: 1.45; margin: 18px 0 6px; letter-spacing: -0.005em; }
+.lernkarte .frage .katex { font-size: 1.1em; }
+.lernkarte .trennlinie { height: 1px; background: var(--linie); margin: 26px 0; }
+.lernkarte .antwort { font-size: 20px; line-height: 1.6; }
+.lernkarte .antwort .katex-display > .katex { font-size: 1.35em; }
+.lernknoepfe { display: flex; gap: 14px; justify-content: center; margin-top: 26px; flex-wrap: wrap; }
+.lernknoepfe .knopf { min-width: 200px; }
+.knopf.gewusst { background: var(--gruen); border-color: var(--gruen); color: #fff; }
+.knopf.gewusst:hover { filter: brightness(1.06); background: var(--gruen); }
+.knopf.nicht-gewusst { background: var(--flaeche); border-color: var(--rot); color: var(--rot); }
+.knopf.nicht-gewusst:hover { background: var(--rot-hell); }
+@media (prefers-color-scheme: dark) { .knopf.gewusst { color: #10261b; } }
+.tastenhinweis { text-align: center; color: var(--text-3); font-size: 13.5px; margin-top: 14px; }
+.taste { display: inline-block; border: 1px solid var(--linie-2); border-bottom-width: 2px; border-radius: 5px; padding: 0 6px; font-size: 12px; margin: 0 2px; }
+
+/* ---------- Dialog ---------- */
+.dialog-hintergrund { position: fixed; inset: 0; background: rgba(15, 18, 25, .45); display: grid; place-items: center; z-index: 50; padding: 16px; }
+.dialog { width: min(760px, 100%); max-height: 92vh; overflow: auto; padding: 28px; }
+.vorschau { padding: 14px 16px; background: var(--flaeche-2); border-radius: 12px; border: 1px solid var(--linie); margin-top: -6px; margin-bottom: 16px; }
+
+.checkliste { list-style: none; padding: 0; margin: 0; }
+.checkliste li { padding: 12px 0; border-bottom: 1px solid var(--linie); }
+.checkliste li:last-child { border-bottom: none; }
+.checkliste label { display: flex; gap: 12px; align-items: center; cursor: pointer; }
+.checkliste input { width: 18px; height: 18px; accent-color: var(--akzent); }
+
+@media (max-width: 720px) {
+  main { padding: 28px 16px 80px; }
+  .kopfleiste-innen { padding: 0 16px; gap: 14px; }
+  .logo span:last-child { display: none; }
+  h1 { font-size: 28px; }
+  .lernkarte { padding: 26px 22px; }
+  .lernkarte .frage { font-size: 21px; }
+  .lernknoepfe .knopf { min-width: 0; flex: 1; }
+}
+
+/* ---------- Handy & Tablet ---------- */
+.nav-symbol { display: none; }
+body { overscroll-behavior-y: none; -webkit-tap-highlight-color: transparent; }
+.kopfleiste { padding-top: env(safe-area-inset-top); }
+button, a, .karteneintrag .vorne, .ablage { touch-action: manipulation; }
+@media (hover: none) {
+  .bereich-kachel:hover { transform: none; box-shadow: var(--schatten); }
+}
+@media (max-width: 900px) {
+  /* Eingaben mindestens 16px, sonst zoomt iOS beim Antippen */
+  input, textarea, select { font-size: 16px; }
+  .knopf { min-height: 44px; }
+  .knopf.klein { min-height: 38px; }
+}
+@media (max-width: 720px) {
+  body { font-size: 16.5px; }
+  main { padding-bottom: calc(110px + env(safe-area-inset-bottom)); padding-left: max(16px, env(safe-area-inset-left)); padding-right: max(16px, env(safe-area-inset-right)); }
+  .kopfleiste-innen { height: 54px; }
+  .navigation {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; gap: 0; justify-content: space-around;
+    background: color-mix(in srgb, var(--flaeche) 94%, transparent); backdrop-filter: blur(14px);
+    border-top: 1px solid var(--linie); padding: 6px 4px calc(6px + env(safe-area-inset-bottom)); overflow: visible;
+  }
+  .navigation a { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 4px 2px; font-size: 11px; gap: 1px; border-radius: 10px; min-width: 0; }
+  .navigation a.aktiv { background: transparent; box-shadow: none; color: var(--akzent); }
+  .nav-symbol { display: block; font-size: 21px; line-height: 1.2; }
+  .nav-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+  .zaehler { position: absolute; top: 0; right: 14%; margin: 0; min-width: 17px; line-height: 17px; font-size: 11px; }
+  .hintergrund-hinweis { margin-left: auto; font-size: 13px; }
+  .reihe.zwischen { gap: 12px; }
+  .kennzahlen { grid-template-columns: repeat(2, 1fr); }
+  .kennzahl { padding: 14px 16px; border-right: 1px solid var(--linie); border-bottom: 1px solid var(--linie); }
+  .kennzahl .wert { font-size: 22px; }
+  .karteneintrag .vorne { flex-wrap: wrap; }
+  .karteneintrag .vorne .reihe { width: 100%; padding-left: 26px; }
+  .lernkarte { min-height: 300px; }
+  .lernknoepfe { position: sticky; bottom: calc(76px + env(safe-area-inset-bottom)); }
+  .lernknoepfe .knopf { min-height: 56px; }
+  .tastenhinweis { display: none; }
+  .dialog-hintergrund { align-items: end; padding: 0; }
+  .dialog { border-radius: 20px 20px 0 0; max-height: 94vh; }
+  .ablage { padding: 32px 16px; }
+}
+@media (min-width: 721px) and (max-width: 1100px) {
+  /* iPad */
+  main { padding-left: max(24px, env(safe-area-inset-left)); padding-right: max(24px, env(safe-area-inset-right)); }
+  .lernkarte .frage { font-size: 28px; }
+  .lernkarte .antwort { font-size: 22px; }
+}
+@media (display-mode: standalone) {
+  .tastenhinweis { display: none; }
+}
+@media (max-width: 720px) {
+  .kopfleiste { backdrop-filter: none; background: var(--bg); }
+  .lernkopf { flex-wrap: wrap; }
+  .lernkopf select { width: 100% !important; max-width: none !important; }
+  .knopf { transition: none; }
+}
