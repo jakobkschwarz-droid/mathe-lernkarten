@@ -51,7 +51,7 @@ export async function frageGemini<T>(apiKey: string, qualitaet: "hoch" | "schnel
   try {
     res = await aufrufen(MODELL[qualitaet], apiKey, a);
     // Das große Modell ist in der kostenlosen Stufe oft gesperrt oder ausgelastet.
-    if (qualitaet === "hoch" && [403, 404, 429].includes(res.status)) {
+    if (qualitaet === "hoch" && (res.status >= 500 || [403, 404, 429].includes(res.status))) {
       res = await aufrufen(MODELL.schnell, apiKey, a);
     }
   } catch {
@@ -75,9 +75,10 @@ export async function frageGemini<T>(apiKey: string, qualitaet: "hoch" | "schnel
     if (res.status === 413 || (res.status === 400 && /size|large|token|pages/i.test(meldung))) {
       throw new NutzerFehler("Die Datei ist zu groß, um sie auf einmal auszuwerten. Teile sie bitte in kleinere Dateien auf.");
     }
-    if (res.status >= 500) throw new NutzerFehler("Die KI ist gerade nicht erreichbar. Bitte versuche es gleich noch einmal.");
+    const detail = ` (Code ${res.status}: ${meldung.slice(0, 160)})`;
+    if (res.status >= 500) throw new NutzerFehler("Die KI ist gerade nicht erreichbar. Bitte versuche es gleich noch einmal." + detail);
     console.error("Gemini:", res.status, meldung);
-    throw new NutzerFehler("Die Datei konnte nicht ausgewertet werden. Bitte versuche es noch einmal.");
+    throw new NutzerFehler("Die Datei konnte nicht ausgewertet werden. Bitte versuche es noch einmal." + detail);
   }
 
   const daten = await res.json();
