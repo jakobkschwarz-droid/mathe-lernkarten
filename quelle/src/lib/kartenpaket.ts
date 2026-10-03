@@ -29,7 +29,7 @@ export async function kartenImportieren(karten: Karte[]): Promise<number> {
 
 export const PAKETE = [
   { datei: "abi-lernzettel", titel: "Abi-Lernzettel: Analysis, Vektoren, Stochastik", anzahl: 104 },
-  { datei: "abstaende-spiegelung", titel: "Vektoren: Abstände und Spiegelungen", anzahl: 17 },
+  { datei: "vektoren-zettel", titel: "Vektoren: Abstände, Spiegelungen, Geraden, Ebenen", anzahl: 25 },
 ];
 
 export async function paketLaden(datei: string): Promise<number> {
