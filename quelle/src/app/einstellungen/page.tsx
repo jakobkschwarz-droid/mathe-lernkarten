@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { db } from "@/lib/db";
 import { einstellungenLaden, einstellungenSpeichern, type Einstellungen } from "@/lib/einstellungen";
 import type { Karte, Widerspruch } from "@/lib/types";
+import { neuerLernstand } from "@/lib/srs";
 
 export default function EinstellungenSeite() {
   const [e, setE] = useState<Einstellungen>({ anbieter: "claude", schluessel: "", geminiSchluessel: "", qualitaet: "hoch" });
@@ -37,12 +38,30 @@ export default function EinstellungenSeite() {
     try {
       const d = JSON.parse(await f.text()) as { karten: Karte[]; verlauf: never[]; widersprueche: Widerspruch[] };
       if (!Array.isArray(d.karten)) throw new Error();
-      if (!confirm(`${d.karten.length} Karten aus der Sicherung laden? Gleiche Karten werden überschrieben.`)) return;
-      await db.karten.bulkPut(d.karten);
+      if (!confirm(`${d.karten.length} Karten laden? Bereits vorhandene Karten behalten ihren Lernfortschritt.`)) return;
+      const jetzt = Date.now();
+      const vorhanden = new Map((await db.karten.bulkGet(d.karten.map((k) => k.id))).map((k) => [k?.id, k]));
+      await db.karten.bulkPut(
+        d.karten.map((k): Karte => {
+          const alt = vorhanden.get(k.id);
+          return {
+            ...k,
+            pfad: k.pfad ?? [],
+            bereich: k.bereich ?? k.pfad?.[0] ?? "Sonstiges",
+            hinweis: k.hinweis ?? "",
+            quellen: k.quellen ?? [],
+            status: k.status ?? "aktiv",
+            erstellt: k.erstellt ?? jetzt,
+            geaendert: k.geaendert ?? jetzt,
+            faellig: alt?.faellig ?? k.faellig ?? jetzt,
+            lernstand: alt?.lernstand ?? k.lernstand ?? neuerLernstand(),
+          };
+        }),
+      );
       await db.widersprueche.bulkPut(d.widersprueche ?? []);
-      setMeldung("Die Sicherung wurde geladen.");
+      setMeldung("Die Karten wurden geladen.");
     } catch {
-      setMeldung("Diese Datei ist keine gültige Sicherung.");
+      setMeldung("Diese Datei ist keine gültige Karten- oder Sicherungsdatei.");
     }
   }
 
@@ -98,9 +117,9 @@ export default function EinstellungenSeite() {
         <p className="leise">Alle Karten und dein Lernfortschritt liegen dauerhaft in diesem Browser. Mit einer Sicherung kannst du sie auf ein anderes Gerät mitnehmen.</p>
         <div className="reihe">
           <button className="knopf" onClick={sichern}>Sicherung speichern</button>
-          <button className="knopf" onClick={() => datei.current?.click()}>Sicherung laden</button>
+          <button className="knopf" onClick={() => datei.current?.click()}>Karten laden (Sicherung oder Kartenpaket)</button>
           <button className="knopf gefahr" onClick={alleLoeschen}>Alles löschen</button>
-          <input ref={datei} type="file" accept=".lernkarten,application/json" style={{ display: "none" }} onChange={(x) => { const f = x.target.files?.[0]; if (f) wiederherstellen(f); x.target.value = ""; }} />
+          <input ref={datei} type="file" accept=".lernkarten,.json,application/json" style={{ display: "none" }} onChange={(x) => { const f = x.target.files?.[0]; if (f) wiederherstellen(f); x.target.value = ""; }} />
         </div>
         {meldung && <div className="hinweisbox blau" style={{ marginTop: 16, marginBottom: 0 }}>{meldung}</div>}
       </div>
