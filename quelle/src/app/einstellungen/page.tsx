@@ -119,7 +119,7 @@ export default function EinstellungenSeite() {
           <button className="knopf" onClick={sichern}>Sicherung speichern</button>
           <button className="knopf" onClick={() => datei.current?.click()}>Karten laden (Sicherung oder Kartenpaket)</button>
           <button className="knopf gefahr" onClick={alleLoeschen}>Alles löschen</button>
-          <input ref={datei} type="file" accept=".lernkarten,.json,application/json" style={{ display: "none" }} onChange={(x) => { const f = x.target.files?.[0]; if (f) wiederherstellen(f); x.target.value = ""; }} />
+          <input ref={datei} type="file" style={{ display: "none" }} onChange={(x) => { const f = x.target.files?.[0]; if (f) wiederherstellen(f); x.target.value = ""; }} />
         </div>
         {meldung && <div className="hinweisbox blau" style={{ marginTop: 16, marginBottom: 0 }}>{meldung}</div>}
       </div>
