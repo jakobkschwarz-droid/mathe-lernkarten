@@ -7,6 +7,7 @@ import { kennzahlen, pfadZuUrl } from "@/lib/themen";
 import { bereichsauswertung, heuteGelernt } from "@/lib/statistik";
 import { ErstellenKnopf, Fortschritt } from "@/components/Erstellen";
 import { usePipeline } from "@/lib/pipeline";
+import { Kartenpakete } from "@/components/Kartenpakete";
 
 export default function Uebersicht() {
   const pipeline = usePipeline();
@@ -42,6 +43,7 @@ export default function Uebersicht() {
           ) : (
             <Link href="/material" className="knopf haupt gross">📄 Lernmaterial hochladen</Link>
           )}
+          <Kartenpakete />
           {zuPruefen > 0 && (
             <p style={{ marginTop: 20 }}>
               <Link href="/pruefen">{zuPruefen} Karten warten auf deine Prüfung</Link>

@@ -4,7 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { db } from "@/lib/db";
 import { einstellungenLaden, einstellungenSpeichern, type Einstellungen } from "@/lib/einstellungen";
 import type { Karte, Widerspruch } from "@/lib/types";
-import { neuerLernstand } from "@/lib/srs";
+import { kartenImportieren } from "@/lib/kartenpaket";
+import { Kartenpakete } from "@/components/Kartenpakete";
 
 export default function EinstellungenSeite() {
   const [e, setE] = useState<Einstellungen>({ anbieter: "claude", schluessel: "", geminiSchluessel: "", qualitaet: "hoch" });
@@ -39,25 +40,7 @@ export default function EinstellungenSeite() {
       const d = JSON.parse(await f.text()) as { karten: Karte[]; verlauf: never[]; widersprueche: Widerspruch[] };
       if (!Array.isArray(d.karten)) throw new Error();
       if (!confirm(`${d.karten.length} Karten laden? Bereits vorhandene Karten behalten ihren Lernfortschritt.`)) return;
-      const jetzt = Date.now();
-      const vorhanden = new Map((await db.karten.bulkGet(d.karten.map((k) => k.id))).map((k) => [k?.id, k]));
-      await db.karten.bulkPut(
-        d.karten.map((k): Karte => {
-          const alt = vorhanden.get(k.id);
-          return {
-            ...k,
-            pfad: k.pfad ?? [],
-            bereich: k.bereich ?? k.pfad?.[0] ?? "Sonstiges",
-            hinweis: k.hinweis ?? "",
-            quellen: k.quellen ?? [],
-            status: k.status ?? "aktiv",
-            erstellt: k.erstellt ?? jetzt,
-            geaendert: k.geaendert ?? jetzt,
-            faellig: alt?.faellig ?? k.faellig ?? jetzt,
-            lernstand: alt?.lernstand ?? k.lernstand ?? neuerLernstand(),
-          };
-        }),
-      );
+      await kartenImportieren(d.karten);
       await db.widersprueche.bulkPut(d.widersprueche ?? []);
       setMeldung("Die Karten wurden geladen.");
     } catch {
@@ -121,6 +104,7 @@ export default function EinstellungenSeite() {
           <button className="knopf gefahr" onClick={alleLoeschen}>Alles löschen</button>
           <input ref={datei} type="file" style={{ display: "none" }} onChange={(x) => { const f = x.target.files?.[0]; if (f) wiederherstellen(f); x.target.value = ""; }} />
         </div>
+        <Kartenpakete />
         {meldung && <div className="hinweisbox blau" style={{ marginTop: 16, marginBottom: 0 }}>{meldung}</div>}
       </div>
     </div>
