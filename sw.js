@@ -1,6 +1,6 @@
 // Macht die App offlinefähig: Seiten und Schriften werden beim Besuch
 // zwischengespeichert, damit man auch ohne Internet lernen kann.
-const VERSION = "v4";
+const VERSION = "v5";
 const CACHE = `lernapp-${VERSION}`;
 
 self.addEventListener("install", () => self.skipWaiting());
